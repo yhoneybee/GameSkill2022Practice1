@@ -8,6 +8,8 @@ public class GameManager : Singletone<GameManager>
     public SliderLinker painLinker;
     public SliderLinker expLinker;
 
+    public float mapIconScale = 0.5f;
+
     public int pain;
 
     public int maxPain = 100;
@@ -17,7 +19,11 @@ public class GameManager : Singletone<GameManager>
         get => pain;
         set
         {
-            if (value > maxPain) value = maxPain;
+            if (value > maxPain)
+            {
+                value = maxPain;
+                SadEnding();
+            }
             else if (value < 0) value = 0;
             pain = value;
             painLinker.curValue = value;
@@ -56,17 +62,13 @@ public class GameManager : Singletone<GameManager>
         }
     }
 
-    private void Update()
+    public void SadEnding()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Exp += 10;
-            Pain += 10;
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            Exp -= 10;
-            Pain -= 10;
-        }
+        Debug.LogWarning($"SadEnding Method in GameManager is empty");
+    }
+
+    public void HappyEnding()
+    {
+        Debug.LogWarning($"HappyEnding Method in GameManager is empty");
     }
 }

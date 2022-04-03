@@ -18,14 +18,9 @@ public abstract class BaseAll : MonoBehaviour
     public virtual void Start()
     {
         sphereCollider = GetComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
     }
 
-    public virtual void Get()
-    {
-
-    }
-    public virtual void Return()
-    {
-
-    }
+    public virtual void Get() { }
+    public virtual void Return() { }
 }

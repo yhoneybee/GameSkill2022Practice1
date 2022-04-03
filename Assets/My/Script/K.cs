@@ -2,12 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public static class K
 {
     public static Player player = null;
 
     public static GameInfo gameInfo = null;
+    public static RankInfo rankInfo = null;
+
+    public static List<BaseEnemy> enemies = new List<BaseEnemy>();
+
+    public static BaseEnemy GetNearEnemy(Transform origin, Predicate<BaseEnemy> match)
+        => enemies.FindAll(x => x.gameObject.activeSelf && x.transform != origin && match(x)).OrderBy(x => Vector3.Distance(x.transform.position, origin.transform.position)).FirstOrDefault();
+
+    public static BaseEnemy GetNearEnemy(Transform origin)
+        => enemies.FindAll(x => x.gameObject.activeSelf && x.transform != origin).OrderBy(x => Vector3.Distance(x.transform.position, origin.transform.position)).FirstOrDefault();
 
     public static float GameDT => Time.deltaTime * gameTS;
     public static float gameTS = 1;
@@ -34,9 +44,9 @@ public static class K
         return Circle(theta, radius, radius);
     }
 
-    public static Vector3[] Shapes(int angleCount, float radius, float unClockRotate)
+    public static Vector3[] Shapes(int angleCount, float radius, float theta)
     {
-        Vector3[] result = new Vector3[angleCount];
+        Vector3[] result = new Vector3[angleCount + 1];
 
         int add = 360 / angleCount;
 
@@ -44,13 +54,13 @@ public static class K
 
         for (int i = 0; i < 360; i += add)
         {
-            result[idx++] = Circle(i + unClockRotate, radius);
+            result[idx++] = Circle(i + theta, radius);
         }
 
         return result;
     }
 
-    public static void Shot<T>(PoolType type, Vector3 pos, Vector3 dir, int damage, float moveSpeed, int throughCount = 0, bool isEnemy = false)
+    public static T Shot<T>(PoolType type, Vector3 pos, Vector3 dir, int damage, float moveSpeed, int throughCount = 0, bool isEnemy = false)
         where T : BaseBullet
     {
         var bullet = ObjPool.Instance.Get<T>(type, pos);
@@ -59,8 +69,18 @@ public static class K
         bullet.moveSpeed = moveSpeed;
         bullet.isEnemy = isEnemy;
         bullet.throughCount = throughCount;
+        bullet.tr.colorGradient = isEnemy ? bullet.enemyColor : bullet.playerColor;
 
-        if (isEnemy) bullet.tr.colorGradient = bullet.enemyColor;
-        else bullet.tr.colorGradient = bullet.playerColor;
+        return bullet;
+    }
+
+    public static IEnumerator EChangeScale(Transform tf, Vector3 toScale, float speed)
+    {
+        while (Vector3.Distance(tf.localScale, toScale) >= 0.01f)
+        {
+            yield return null;
+            tf.localScale = Vector3.Lerp(tf.localScale, toScale, speed * Time.deltaTime);
+        }
+        tf.localScale = toScale;
     }
 }

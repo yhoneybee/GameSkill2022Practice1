@@ -5,14 +5,18 @@ using UnityEngine;
 public class Player : BaseObject
 {
     public GameObject[] rotatable;
+    public List<BaseAddon>[] addons = new List<BaseAddon>[((int)eADDON_TYPE.End)];
 
     public int onceShotCount = 1;
     public int multiCount = 1;
     public int throughCount;
+    public int bezierThroughCount;
 
     private void Awake()
     {
         K.player = this;
+        BaseAddon.addonSpeed[0] = 30;
+        BaseAddon.addonSpeed[1] = 60;
     }
 
     public override void Start()
@@ -23,6 +27,18 @@ public class Player : BaseObject
         moveSpeed = K.gameInfo.moveSpeed;
 
         StartCoroutine(EMoveNRotate());
+    }
+
+    public override void ChangeHp()
+    {
+        base.ChangeHp();
+        GameManager.Instance.hpLinker.curValue = hp;
+        GameManager.Instance.hpLinker.MaxValue = MaxHp;
+    }
+
+    public override void Die()
+    {
+        GameManager.Instance.SadEnding();
     }
 
     public IEnumerator EMoveNRotate()
@@ -51,8 +67,6 @@ public class Player : BaseObject
 
     public override IEnumerator Shot()
     {
-        yield return StartCoroutine(base.Shot());
-
         float w = 5;
         float b = -(w * onceShotCount) / 2;
         b += w / 2.0f;
@@ -67,5 +81,10 @@ public class Player : BaseObject
                 K.Shot<NormalBullet>(PoolType.NormalBullet, transform.position + new Vector3(b + w * i, 0, 0), Vector3.forward, damage, 300);
             }
         }
+    }
+
+    public void AddAddon(BaseAddon ba)
+    {
+        
     }
 }

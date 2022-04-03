@@ -7,7 +7,6 @@ public class NormalBullet : BaseBullet
     public override void Get()
     {
         base.Get();
-        StartCoroutine(EMove());
     }
 
     public override void Return()

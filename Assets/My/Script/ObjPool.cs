@@ -6,6 +6,15 @@ using System;
 public enum PoolType
 {
     NormalBullet,
+    BezierBullet,
+    Bacteria,
+    Germ,
+    Virus,
+    Cancer,
+    Covid_19,
+    Covid_19_Mutant,
+    AttackAddon,
+    ShieldAddon,
     None,
     End,
 }
@@ -35,12 +44,17 @@ public class ObjPool : Singletone<ObjPool>
         else
         {
             go = Instantiate(origin);
+            if (go.isEnemy)
+            {
+                BaseEnemy be = go.GetComponent<BaseEnemy>();
+                if (be) K.enemies.Add(be);
+            }
         }
 
-        go.gameObject.SetActive(true);
         go.transform.position = pos;
         go.transform.localScale = origin.transform.localScale;
         go.transform.localRotation = origin.transform.localRotation;
+        go.gameObject.SetActive(true);
         go.Get();
 
         return go;

@@ -13,6 +13,7 @@ public abstract class BaseObject : BaseAll
             if (value <= 0) Die();
             else if (value > MaxHp) hp = MaxHp;
             else hp = value;
+            ChangeHp();
         }
     }
     public int hp;
@@ -43,6 +44,8 @@ public abstract class BaseObject : BaseAll
     {
         base.Start();
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
         StartCoroutine(EShot());
     }
 
@@ -55,14 +58,16 @@ public abstract class BaseObject : BaseAll
         }
     }
 
-    public virtual IEnumerator Shot()
-    {
-        yield return null;
-    }
+    public abstract IEnumerator Shot();
 
     public virtual void Die()
     {
         ObjPool.Instance.Return(poolType, this);
+    }
+
+    public virtual void ChangeHp()
+    {
+
     }
 
     private void OnTriggerEnter(Collider other)
