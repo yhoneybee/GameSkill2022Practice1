@@ -24,6 +24,12 @@ public class AttackAddon : BaseAddon
 
     public void Shot()
     {
-
+        var near = K.GetNearEnemy(K.player.transform);
+        if (!near) return;
+        var bezier = K.Shot<BezierBullet>(PoolType.BezierBullet, transform.position, Vector3.zero, K.player.damage, 200);
+        bezier.shoter = transform;
+        bezier.target = near.transform;
+        bezier.isTracking = true;
+        bezier.Init();
     }
 }

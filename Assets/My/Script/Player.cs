@@ -12,11 +12,42 @@ public class Player : BaseObject
     public int throughCount;
     public int bezierThroughCount;
 
+    public int boomDamage = 1;
+    public int BoomDamage
+    {
+        get => (damage + boomDamage) * 5;
+        set
+        {
+            boomDamage = value;
+        }
+    }
+
+    public float overloadingTime = 3;
+    public float OverloadingTime
+    {
+        get => overloadingTime;
+        set
+        {
+            if (value > 7) value = 7;
+            overloadingTime = value;
+        }
+    }
+    public float overloadingRate = 0.75f;
+    public float OverloadingRate
+    {
+        get => overloadingRate;
+        set
+        {
+            if (value < 0) value = 0;
+            overloadingRate = value;
+        }
+    }
+
+    public int chargeDamage;
+
     private void Awake()
     {
         K.player = this;
-        BaseAddon.addonSpeed[0] = 30;
-        BaseAddon.addonSpeed[1] = 60;
     }
 
     public override void Start()
@@ -28,6 +59,12 @@ public class Player : BaseObject
 
         StartCoroutine(EMoveNRotate());
         StartCoroutine(EWaitRate());
+    }
+
+    private void Update()
+    {
+        BaseAddon.addonTheta[0] += 0.5f;
+        BaseAddon.addonTheta[1] -= 0.25f;
     }
 
     public override void ChangeHp()
@@ -86,6 +123,6 @@ public class Player : BaseObject
 
     public void AddAddon(BaseAddon ba)
     {
-        
+
     }
 }

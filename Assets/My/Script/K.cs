@@ -4,6 +4,22 @@ using UnityEngine;
 using System;
 using System.Linq;
 
+public enum eLEVELUP
+{
+    MaxHpUp,
+    AttackAddonAdd,
+    ShieldAddonAdd,
+    DamageUp,
+    ThroughCountUp,
+    MultiCountUp,
+    SkillReset,
+    BoomDamageUp,
+    OverloadingTimeUp,
+    OverloadingRateUp,
+    ChargeDamageUp,
+    End,
+}
+
 public static class K
 {
     public static Player player = null;
@@ -13,6 +29,21 @@ public static class K
 
     public static List<BaseEnemy> enemies = new List<BaseEnemy>();
     public static List<BaseBullet> bullets = new List<BaseBullet>();
+
+    public static string[] levelUpInfos = 
+    {
+        "[ Stat ]\nMaxHp\nUp",
+        "[ Addon ]\nAttack\nAddon\nAdd",
+        "[ Addon ]\nShield\nAddon\nAdd",
+        "[ Stat ]\nDamage\nUp",
+        "[ Stat ]\nThrough\nCount\nUp",
+        "[ Stat ]\nMulti\nCount\nUp",
+        "[ Skill ]\nCool\nTime\nReset",
+        "[ Skill ]\nBoom\nDamage\nUp",
+        "[ Skill ]\nOverloading\nTime\nUp",
+        "[ Skill ]\nOverloading\nRate\nUp",
+        "[ Stat ]\nCharge\nDamage\nUp",
+    };
 
     public static BaseEnemy GetNearEnemy(Transform origin, Predicate<BaseEnemy> match)
         => enemies.FindAll(x => x.gameObject.activeSelf && x.transform != origin && match(x)).OrderBy(x => Vector3.Distance(x.transform.position, origin.transform.position)).FirstOrDefault();

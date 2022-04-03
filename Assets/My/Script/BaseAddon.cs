@@ -11,15 +11,14 @@ public enum eADDON_TYPE
 
 public abstract class BaseAddon : BaseAll
 {
+    public eADDON_TYPE addonType;
+
     public static int[] addonCount = new int[((int)eADDON_TYPE.End)];
-    public static float[] addonSpeed = new float[((int)eADDON_TYPE.End)];
+    public static float[] addonTheta = new float[((int)eADDON_TYPE.End)];
 
     public int idx;
 
-    public float theta;
     public float radius;
-
-    public bool isUnClockRotate;
 
     public override void Start()
     {
@@ -32,9 +31,7 @@ public abstract class BaseAddon : BaseAll
         while (true)
         {
             yield return null;
-            if (isUnClockRotate) theta += addonSpeed[((int)poolType)];
-            else theta -= addonSpeed[((int)poolType)];
-            transform.position = K.Shapes(addonCount[((int)poolType)], radius, theta)[idx];
+            transform.position = K.Shapes(addonCount[((int)addonType)], radius, addonTheta[((int)addonType)])[idx] + K.player.transform.position;
         }
     }
 }

@@ -4,21 +4,9 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    public Skill boom;
-    public Skill laser;
-    public Skill overload;
-
     public void Start()
     {
         StartCoroutine(ECharge());
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            ObjPool.Instance.Get(PoolType.Bacteria, Vector3.zero);
-        }
     }
 
     public IEnumerator ECharge()
@@ -57,7 +45,7 @@ public class PlayerInput : MonoBehaviour
                     {
                         var near = K.GetNearEnemy(K.player.transform);
                         if (!near) continue;
-                        var bezier = K.Shot<BezierBullet>(PoolType.BezierBullet, K.player.transform.position, Vector3.zero, K.player.damage, 200);
+                        var bezier = K.Shot<BezierBullet>(PoolType.BezierBullet, K.player.transform.position, Vector3.zero, K.player.damage + K.player.chargeDamage, 200);
                         bezier.shoter = K.player.transform;
                         bezier.target = near.transform;
                         bezier.isTracking = true;
