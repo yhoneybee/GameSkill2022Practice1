@@ -12,6 +12,7 @@ public static class K
     public static RankInfo rankInfo = null;
 
     public static List<BaseEnemy> enemies = new List<BaseEnemy>();
+    public static List<BaseBullet> bullets = new List<BaseBullet>();
 
     public static BaseEnemy GetNearEnemy(Transform origin, Predicate<BaseEnemy> match)
         => enemies.FindAll(x => x.gameObject.activeSelf && x.transform != origin && match(x)).OrderBy(x => Vector3.Distance(x.transform.position, origin.transform.position)).FirstOrDefault();
@@ -21,6 +22,8 @@ public static class K
 
     public static float GameDT => Time.deltaTime * gameTS;
     public static float gameTS = 1;
+
+    public static bool IsGameStopped => gameTS == 0;
 
     public static Vector3 BezierCurve(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
     {
@@ -44,17 +47,15 @@ public static class K
         return Circle(theta, radius, radius);
     }
 
-    public static Vector3[] Shapes(int angleCount, float radius, float theta)
+    public static List<Vector3> Shapes(int edgeCount, float radius, float theta)
     {
-        Vector3[] result = new Vector3[angleCount + 1];
+        List<Vector3> result = new List<Vector3>();
 
-        int add = 360 / angleCount;
+        float add = 360 / edgeCount;
 
-        int idx = 0;
-
-        for (int i = 0; i < 360; i += add)
+        for (float i = 0; i < 360; i += add)
         {
-            result[idx++] = Circle(i + theta, radius);
+            result.Add(Circle(i + theta, radius));
         }
 
         return result;

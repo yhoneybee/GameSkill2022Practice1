@@ -27,6 +27,7 @@ public class Player : BaseObject
         moveSpeed = K.gameInfo.moveSpeed;
 
         StartCoroutine(EMoveNRotate());
+        StartCoroutine(EWaitRate());
     }
 
     public override void ChangeHp()
@@ -65,7 +66,7 @@ public class Player : BaseObject
         }
     }
 
-    public override IEnumerator Shot()
+    public override IEnumerator EShot()
     {
         float w = 5;
         float b = -(w * onceShotCount) / 2;

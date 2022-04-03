@@ -10,9 +10,13 @@ public abstract class BaseObject : BaseAll
         get => hp;
         set
         {
-            if (value <= 0) Die();
+            hp = value;
+            if (value <= 0)
+            {
+                hp = 0;
+                Die();
+            }
             else if (value > MaxHp) hp = MaxHp;
-            else hp = value;
             ChangeHp();
         }
     }
@@ -46,19 +50,25 @@ public abstract class BaseObject : BaseAll
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeAll;
-        StartCoroutine(EShot());
     }
 
-    public IEnumerator EShot()
+    public override void Get()
+    {
+        base.Get();
+        StartCoroutine(EWaitRate());
+    }
+
+    public IEnumerator EWaitRate()
     {
         while (true)
         {
             yield return new WaitForSeconds(Rate);
-            yield return StartCoroutine(Shot());
+            if (K.IsGameStopped) continue;
+            yield return StartCoroutine(EShot());
         }
     }
 
-    public abstract IEnumerator Shot();
+    public abstract IEnumerator EShot();
 
     public virtual void Die()
     {

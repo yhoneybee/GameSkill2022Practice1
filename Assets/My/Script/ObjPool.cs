@@ -49,6 +49,8 @@ public class ObjPool : Singletone<ObjPool>
                 BaseEnemy be = go.GetComponent<BaseEnemy>();
                 if (be) K.enemies.Add(be);
             }
+            BaseBullet bb = go.GetComponent<BaseBullet>();
+            if (bb) K.bullets.Add(bb);
         }
 
         go.transform.position = pos;
@@ -66,10 +68,19 @@ public class ObjPool : Singletone<ObjPool>
         return Get(type, pos).GetComponent<T>();
     }
 
-    public void Return(PoolType type, BaseAll go)
+    public void Return(PoolType type, BaseAll ba)
     {
-        go.Return();
-        go.gameObject.SetActive(false);
-        pool[type].Enqueue(go);
+        ba.Return();
+        ba.gameObject.SetActive(false);
+        pool[type].Enqueue(ba);
+    }
+
+    public void WaitReturn(PoolType type, BaseAll ba, float waitTime)
+        => StartCoroutine(EWaitReturn(type, ba, waitTime));
+
+    public IEnumerator EWaitReturn(PoolType type, BaseAll ba, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        Return(type, ba);
     }
 }

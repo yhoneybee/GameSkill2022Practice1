@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6135376504305670105}
   - component: {fileID: 6135376504305670106}
   - component: {fileID: 6135376504305670103}
-  - component: {fileID: -2995773280263638281}
+  - component: {fileID: 6135376504305670104}
   m_Layer: 0
-  m_Name: BezierBullet
+  m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,8 +104,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0.54588175, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 0}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -153,7 +153,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-2995773280263638281
+--- !u!114 &6135376504305670104
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,25 +162,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 6135376504305670107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86d01e7485e9b924fb74cd7403e5794c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc611ada340ae5b4dbd6c492041eb7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sphereCollider: {fileID: 0}
-  poolType: 1
-  isEnemy: 1
+  poolType: 10
+  isEnemy: 0
   damage: 0
   moveSpeed: 0
   tr: {fileID: 0}
   enemyColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0.64744806, a: 1}
+    key0: {r: 1, g: 0.07060598, b: 0, a: 1}
     key1: {r: 1, g: 1, b: 1, a: 0}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
+    key2: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key3: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key4: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key5: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key6: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key7: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
     ctime0: 0
     ctime1: 65535
     ctime2: 0
@@ -202,14 +202,14 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   playerColor:
     serializedVersion: 2
-    key0: {r: 1, g: 0.7317086, b: 0, a: 1}
+    key0: {r: 0, g: 0.54588175, b: 1, a: 1}
     key1: {r: 1, g: 1, b: 1, a: 0}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
+    key2: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key3: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key4: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key5: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key6: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
+    key7: {r: 0.4, g: 0.8509804, b: 0.7372549, a: 0.3882353}
     ctime0: 0
     ctime1: 65535
     ctime2: 0
@@ -231,10 +231,3 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   dir: {x: 0, y: 0, z: 0}
   throughCount: 0
-  shoter: {fileID: 0}
-  target: {fileID: 0}
-  points:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  isTracking: 0

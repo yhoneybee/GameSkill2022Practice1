@@ -34,13 +34,10 @@ public abstract class BaseBullet : BaseAll
         StartCoroutine(EMove());
     }
 
-    public void ChangeBullet()
+    public virtual void ChangeBullet()
     {
         if (isEnemy)
         {
-            if (dir != Vector3.zero) dir = -dir;
-            else dir = Vector3.forward;
-
             tr.colorGradient = playerColor;
             isEnemy = false;
         }
@@ -51,7 +48,7 @@ public abstract class BaseBullet : BaseAll
         while (true)
         {
             yield return null;
-            transform.Translate(dir * moveSpeed * K.GameDT);
+            transform.Translate(K.GameDT * moveSpeed * dir);
         }
     }
 }

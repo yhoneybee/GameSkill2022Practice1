@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class NormalBullet : BaseBullet
 {
+    public override void ChangeBullet()
+    {
+        if (isEnemy)
+        {
+            dir = -dir;
+        }
+        base.ChangeBullet();
+    }
+
     public override void Get()
     {
         base.Get();

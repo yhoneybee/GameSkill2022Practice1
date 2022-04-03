@@ -7,10 +7,11 @@ public class BezierBullet : BaseBullet
     public Transform shoter;
     public Transform target;
 
-    public Vector3[] points = new Vector3[2];
+    public Vector3[] points = new Vector3[3];
+
+    public bool isTracking;
 
     float needTime;
-
     bool isInit;
     bool isMissingTarget;
 
@@ -26,6 +27,7 @@ public class BezierBullet : BaseBullet
 
         points[0] = shoter.position + (6 * Random.Range(-1.0f, 1.0f) * shoter.right) + (6 * Random.Range(-1.0f, -0.6f) * shoter.forward);
         points[1] = target.position + (6 * Random.Range(-1.0f, 1.0f) * target.right) + (6 * Random.Range(0.6f, 1.0f) * target.forward);
+        points[2] = target.position;
 
         transform.position = shoter.position;
 
@@ -50,7 +52,26 @@ public class BezierBullet : BaseBullet
             }
             if (isMissingTarget) continue;
             time += K.GameDT;
-            transform.position = K.BezierCurve(shoter.position, points[0], points[1], target.position, time / needTime);
+            transform.position = K.BezierCurve(shoter.position, points[0], points[1], isTracking ? target.position : points[2], time / needTime);
         }
+    }
+
+    public override void ChangeBullet()
+    {
+        if (isEnemy)
+        {
+            var near = K.GetNearEnemy(transform);
+
+            dir = Vector3.forward;
+
+            if (near)
+            {
+                shoter = K.player.transform;
+                target = near.transform;
+                Init();
+            }
+            else StartCoroutine(base.EMove());
+        }
+        base.ChangeBullet();
     }
 }

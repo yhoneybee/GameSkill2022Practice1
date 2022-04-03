@@ -8,21 +8,64 @@ public class PlayerInput : MonoBehaviour
     public Skill laser;
     public Skill overload;
 
+    public void Start()
+    {
+        StartCoroutine(ECharge());
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
             ObjPool.Instance.Get(PoolType.Bacteria, Vector3.zero);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+    }
+
+    public IEnumerator ECharge()
+    {
+        float edgeCount = 0, theta = 0;
+        while (true)
         {
-            var near = K.GetNearEnemy(K.player.transform);
-            if (near)
+            yield return null;
+            if (Input.GetKey(KeyCode.Space))
             {
-                var bezier = K.Shot<BezierBullet>(PoolType.BezierBullet, transform.position, Vector3.zero, K.player.damage, 200, K.player.bezierThroughCount);
-                bezier.shoter = K.player.transform;
-                bezier.target = K.GetNearEnemy(K.player.transform).transform;
-                bezier.Init();
+                if (edgeCount < 3)
+                {
+                    edgeCount += K.GameDT;
+                    if (edgeCount < 1) continue;
+                }
+                else
+                {
+                    edgeCount = 3;
+                }
+
+                theta += 50;
+                var shapes = K.Shapes(((int)edgeCount + 4), 10, theta);
+
+                for (int i = 0; i < shapes.Count; i++)
+                {
+                    var bullet = K.Shot<NormalBullet>(PoolType.NormalBullet, transform.position + shapes[i], shapes[(i + 2) % shapes.Count].normalized, 0, 50, 200000);
+                    ObjPool.Instance.WaitReturn(bullet.poolType, bullet, 0.05f);
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.Space))
+            {
+                for (int i = 0; i < ((int)edgeCount + 2); i++)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    for (int j = 0; j < GameManager.Instance.Level; j++)
+                    {
+                        var near = K.GetNearEnemy(K.player.transform);
+                        if (!near) continue;
+                        var bezier = K.Shot<BezierBullet>(PoolType.BezierBullet, K.player.transform.position, Vector3.zero, K.player.damage, 200);
+                        bezier.shoter = K.player.transform;
+                        bezier.target = near.transform;
+                        bezier.isTracking = true;
+                        bezier.Init();
+                    }
+                }
+
+                edgeCount = 0;
             }
         }
     }
