@@ -20,7 +20,7 @@ public class Bacteria : BaseEnemy
             for (int j = 0; j < v3s.Count; j++)
             {
                 yield return new WaitForSeconds(0.1f);
-                K.Shot<NormalBullet>(PoolType.NormalBullet, transform.position, v3s[j], damage, 100, 0, true);
+                K.Shot<NormalBullet>(ePOOL_TYPE.NormalBullet, transform.position, v3s[j], damage, 100, 0, true);
             }
         }
     }

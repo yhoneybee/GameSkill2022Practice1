@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Timeline;
 using UnityEngine.Playables;
 
@@ -12,12 +13,18 @@ public class GameManager : Singletone<GameManager>
 
     public PlayableDirector pdAppearLevelUp;
     public PlayableDirector pdDisappearLevelUp;
+    public PlayableDirector pdItem;
 
     public LevelUpLinker[] levelUpLinkers = new LevelUpLinker[3];
 
     public Skill[] skills = new Skill[3];
 
+    public Text txtScore;
+    public Text txtItem;
+
     public float mapIconScale = 0.5f;
+
+    public int stage = 1;
 
     public int pain;
 
@@ -74,6 +81,9 @@ public class GameManager : Singletone<GameManager>
         }
     }
 
+    public float score;
+    public float curScore;
+
     public void SadEnding()
     {
         Debug.LogWarning($"SadEnding Method in GameManager is empty");
@@ -82,6 +92,21 @@ public class GameManager : Singletone<GameManager>
     public void HappyEnding()
     {
         Debug.LogWarning($"HappyEnding Method in GameManager is empty");
+    }
+
+    private void Start()
+    {
+        StartCoroutine(EScore());
+    }
+
+    public IEnumerator EScore()
+    {
+        while (true)
+        {
+            yield return null;
+            curScore = Mathf.Lerp(curScore, score + 1, Time.deltaTime);
+            txtScore.text = $"Score : {((int)curScore)}";
+        }
     }
 
     public void RandomIndex()
@@ -112,28 +137,30 @@ public class GameManager : Singletone<GameManager>
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            var be = ObjPool.Instance.Get<Bacteria>(PoolType.Bacteria, Vector3.zero);
+            var be = ObjPool.Instance.Get<Bacteria>(ePOOL_TYPE.Bacteria, Vector3.zero);
         }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            var aa = ObjPool.Instance.Get<AttackAddon>(PoolType.AttackAddon, Vector3.zero);
-            aa.idx = BaseAddon.addonCount[((int)eADDON_TYPE.Attack)]++;
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            var sa = ObjPool.Instance.Get<ShieldAddon>(PoolType.ShieldAddon, Vector3.zero);
-            sa.idx = BaseAddon.addonCount[((int)eADDON_TYPE.Shield)]++;
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            K.gameTS = 0;
-            RandomIndex();
-            pdAppearLevelUp.Play();
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            K.gameTS = 1;
-            pdDisappearLevelUp.Play();
-        }
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    var aa = ObjPool.Instance.Get<AttackAddon>(ePOOL_TYPE.AttackAddon, Vector3.zero);
+        //    aa.idx = BaseAddon.addonCount[((int)eADDON_TYPE.Attack)]++;
+        //}
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    var sa = ObjPool.Instance.Get<ShieldAddon>(ePOOL_TYPE.ShieldAddon, Vector3.zero);
+        //    sa.idx = BaseAddon.addonCount[((int)eADDON_TYPE.Shield)]++;
+        //}
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    K.gameTS = 0;
+        //    RandomIndex();
+        //    pdAppearLevelUp.Stop();
+        //    pdAppearLevelUp.Play();
+        //}
+        //if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    K.gameTS = 1;
+        //    pdDisappearLevelUp.Stop();
+        //    pdDisappearLevelUp.Play();
+        //}
     }
 }

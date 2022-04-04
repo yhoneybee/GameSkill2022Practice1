@@ -10,6 +10,7 @@ public abstract class BaseObject : BaseAll
         get => hp;
         set
         {
+            int beforeHp = hp;
             hp = value;
             if (value <= 0)
             {
@@ -17,7 +18,7 @@ public abstract class BaseObject : BaseAll
                 Die();
             }
             else if (value > MaxHp) hp = MaxHp;
-            ChangeHp();
+            ChangeHp(beforeHp, hp);
         }
     }
     public int hp;
@@ -28,7 +29,7 @@ public abstract class BaseObject : BaseAll
         set
         {
             maxHp = value;
-            ChangeHp();
+            ChangeHp(hp, hp);
         }
     }
     public int maxHp;
@@ -42,6 +43,8 @@ public abstract class BaseObject : BaseAll
         }
     }
     public float rate;
+
+    public bool noDamage;
 
     public Rigidbody rb;
 
@@ -76,10 +79,7 @@ public abstract class BaseObject : BaseAll
         ObjPool.Instance.Return(poolType, this);
     }
 
-    public virtual void ChangeHp()
-    {
-
-    }
+    public virtual void ChangeHp(int now, int to) { }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -99,13 +99,13 @@ public abstract class BaseObject : BaseAll
                 ObjPool.Instance.Return(bb.poolType, bb);
             }
 
-            Hp -= bb.damage;
+            if (!noDamage) Hp -= bb.damage;
         }
         else if (bo)
         {
             if (isEnemy == bo.isEnemy) return;
 
-            Hp -= bo.damage / 2;
+            if (!noDamage) Hp -= bo.damage / 2;
         }
     }
 }

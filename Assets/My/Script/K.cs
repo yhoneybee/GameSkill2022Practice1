@@ -12,10 +12,9 @@ public enum eLEVELUP
     DamageUp,
     ThroughCountUp,
     MultiCountUp,
-    SkillReset,
     BoomDamageUp,
-    OverloadingTimeUp,
-    OverloadingRateUp,
+    LaserTimeUp,
+    LaserRateUp,
     ChargeDamageUp,
     End,
 }
@@ -38,10 +37,9 @@ public static class K
         "[ Stat ]\nDamage\nUp",
         "[ Stat ]\nThrough\nCount\nUp",
         "[ Stat ]\nMulti\nCount\nUp",
-        "[ Skill ]\nCool\nTime\nReset",
         "[ Skill ]\nBoom\nDamage\nUp",
-        "[ Skill ]\nOverloading\nTime\nUp",
-        "[ Skill ]\nOverloading\nRate\nUp",
+        "[ Skill ]\nLaser\nTime\nUp",
+        "[ Skill ]\nLaser\nRate\nUp",
         "[ Stat ]\nCharge\nDamage\nUp",
     };
 
@@ -92,7 +90,7 @@ public static class K
         return result;
     }
 
-    public static T Shot<T>(PoolType type, Vector3 pos, Vector3 dir, int damage, float moveSpeed, int throughCount = 0, bool isEnemy = false)
+    public static T Shot<T>(ePOOL_TYPE type, Vector3 pos, Vector3 dir, int damage, float moveSpeed, int throughCount = 0, bool isEnemy = false)
         where T : BaseBullet
     {
         var bullet = ObjPool.Instance.Get<T>(type, pos);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum PoolType
+public enum ePOOL_TYPE
 {
     NormalBullet,
     BezierBullet,
@@ -15,19 +15,22 @@ public enum PoolType
     Covid_19_Mutant,
     AttackAddon,
     ShieldAddon,
+    Boom,
+    BoomBullet,
+    Item,
     None,
     End,
 }
 
 public class ObjPool : Singletone<ObjPool>
 {
-    public PoolType type;
+    public ePOOL_TYPE type;
 
     public BaseAll[] originObjects;
 
-    public Dictionary<PoolType, Queue<BaseAll>> pool = new Dictionary<PoolType, Queue<BaseAll>>();
+    public Dictionary<ePOOL_TYPE, Queue<BaseAll>> pool = new Dictionary<ePOOL_TYPE, Queue<BaseAll>>();
 
-    public BaseAll Get(PoolType type, Vector3 pos)
+    public BaseAll Get(ePOOL_TYPE type, Vector3 pos)
     {
         BaseAll go = null;
 
@@ -62,23 +65,23 @@ public class ObjPool : Singletone<ObjPool>
         return go;
     }
 
-    public T Get<T>(PoolType type, Vector3 pos)
+    public T Get<T>(ePOOL_TYPE type, Vector3 pos)
         where T : MonoBehaviour
     {
         return Get(type, pos).GetComponent<T>();
     }
 
-    public void Return(PoolType type, BaseAll ba)
+    public void Return(ePOOL_TYPE type, BaseAll ba)
     {
         ba.Return();
         ba.gameObject.SetActive(false);
         pool[type].Enqueue(ba);
     }
 
-    public void WaitReturn(PoolType type, BaseAll ba, float waitTime)
+    public void WaitReturn(ePOOL_TYPE type, BaseAll ba, float waitTime)
         => StartCoroutine(EWaitReturn(type, ba, waitTime));
 
-    public IEnumerator EWaitReturn(PoolType type, BaseAll ba, float waitTime)
+    public IEnumerator EWaitReturn(ePOOL_TYPE type, BaseAll ba, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         Return(type, ba);

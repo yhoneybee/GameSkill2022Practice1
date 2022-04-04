@@ -7,7 +7,7 @@ public abstract class BaseAll : MonoBehaviour
 {
     public SphereCollider sphereCollider;
 
-    public PoolType poolType;
+    public ePOOL_TYPE poolType;
 
     public bool isEnemy = true;
 

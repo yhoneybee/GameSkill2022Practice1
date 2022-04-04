@@ -6,6 +6,7 @@ public class Player : BaseObject
 {
     public GameObject[] rotatable;
     public List<BaseAddon>[] addons = new List<BaseAddon>[((int)eADDON_TYPE.End)];
+    public LineRenderer lr;
 
     public int onceShotCount = 1;
     public int multiCount = 1;
@@ -23,7 +24,7 @@ public class Player : BaseObject
     }
 
     public float overloadingTime = 3;
-    public float OverloadingTime
+    public float LaserTime
     {
         get => overloadingTime;
         set
@@ -33,7 +34,7 @@ public class Player : BaseObject
         }
     }
     public float overloadingRate = 0.75f;
-    public float OverloadingRate
+    public float LaserRate
     {
         get => overloadingRate;
         set
@@ -44,6 +45,8 @@ public class Player : BaseObject
     }
 
     public int chargeDamage;
+
+    public float noDamageTime;
 
     private void Awake()
     {
@@ -57,8 +60,11 @@ public class Player : BaseObject
         damage = K.gameInfo.damage;
         moveSpeed = K.gameInfo.moveSpeed;
 
+        if (!lr) lr = GetComponent<LineRenderer>();
+
         StartCoroutine(EMoveNRotate());
         StartCoroutine(EWaitRate());
+        StartCoroutine(ENoDamage());
     }
 
     private void Update()
@@ -67,16 +73,56 @@ public class Player : BaseObject
         BaseAddon.addonTheta[1] -= 0.25f;
     }
 
-    public override void ChangeHp()
+    public override void ChangeHp(int now, int to)
     {
-        base.ChangeHp();
-        GameManager.Instance.hpLinker.curValue = hp;
+        base.ChangeHp(now, to);
+
+        if (now > to)
+        {
+            noDamageTime = 1.5f;
+        }
+
+        GameManager.Instance.hpLinker.curValue = to;
         GameManager.Instance.hpLinker.MaxValue = MaxHp;
     }
 
     public override void Die()
     {
         GameManager.Instance.SadEnding();
+    }
+
+    public IEnumerator ENoDamage()
+    {
+        while (true)
+        {
+            yield return null;
+
+            if (noDamageTime > 0.5f)
+            {
+                noDamage = true;
+                noDamageTime -= K.GameDT;
+
+                yield return new WaitForSeconds(0.1f);
+                noDamageTime -= 0.1f;
+
+                for (int i = 0; i < rotatable.Length - 1; i++)
+                {
+                    rotatable[i].SetActive(!rotatable[i].activeSelf);
+                }
+            }
+            else if (noDamageTime > 0)
+            {
+                for (int i = 0; i < rotatable.Length - 1; i++)
+                {
+                    rotatable[i].SetActive(true);
+                }
+                noDamageTime -= K.GameDT;
+            }
+            else
+            {
+                noDamage = false;
+            }
+        }
     }
 
     public IEnumerator EMoveNRotate()
@@ -116,13 +162,8 @@ public class Player : BaseObject
             yield return wait;
             for (int i = 0; i < onceShotCount; i++)
             {
-                K.Shot<NormalBullet>(PoolType.NormalBullet, transform.position + new Vector3(b + w * i, 0, 0), Vector3.forward, damage, 300);
+                K.Shot<NormalBullet>(ePOOL_TYPE.NormalBullet, transform.position + new Vector3(b + w * i, 0, 0), Vector3.forward, damage, 300);
             }
         }
-    }
-
-    public void AddAddon(BaseAddon ba)
-    {
-
     }
 }

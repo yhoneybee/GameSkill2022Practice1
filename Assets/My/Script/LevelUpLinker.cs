@@ -20,11 +20,11 @@ public class LevelUpLinker : MonoBehaviour
                     K.player.MaxHp += 50;
                     break;
                 case eLEVELUP.AttackAddonAdd:
-                    var aa = ObjPool.Instance.Get<AttackAddon>(PoolType.AttackAddon, Vector3.zero);
+                    var aa = ObjPool.Instance.Get<AttackAddon>(ePOOL_TYPE.AttackAddon, Vector3.zero);
                     aa.idx = BaseAddon.addonCount[((int)eADDON_TYPE.Attack)]++;
                     break;
                 case eLEVELUP.ShieldAddonAdd:
-                    var sa = ObjPool.Instance.Get<ShieldAddon>(PoolType.ShieldAddon, Vector3.zero);
+                    var sa = ObjPool.Instance.Get<ShieldAddon>(ePOOL_TYPE.ShieldAddon, Vector3.zero);
                     sa.idx = BaseAddon.addonCount[((int)eADDON_TYPE.Shield)]++;
                     break;
                 case eLEVELUP.DamageUp:
@@ -36,18 +36,14 @@ public class LevelUpLinker : MonoBehaviour
                 case eLEVELUP.MultiCountUp:
                     ++K.player.multiCount;
                     break;
-                case eLEVELUP.SkillReset:
-                    for (int i = 0; i < GameManager.Instance.skills.Length; i++)
-                        GameManager.Instance.skills[i].CurCoolDown = 0;
-                    break;
                 case eLEVELUP.BoomDamageUp:
                     ++K.player.BoomDamage;
                     break;
-                case eLEVELUP.OverloadingTimeUp:
-                    K.player.OverloadingTime += 0.3f;
+                case eLEVELUP.LaserTimeUp:
+                    K.player.LaserTime += 0.3f;
                     break;
-                case eLEVELUP.OverloadingRateUp:
-                    K.player.OverloadingRate -= 0.3f;
+                case eLEVELUP.LaserRateUp:
+                    K.player.LaserRate -= 0.3f;
                     break;
                 case eLEVELUP.ChargeDamageUp:
                     ++K.player.chargeDamage;
@@ -55,6 +51,7 @@ public class LevelUpLinker : MonoBehaviour
             }
 
             K.gameTS = 1;
+            GameManager.Instance.pdDisappearLevelUp.Stop();
             GameManager.Instance.pdDisappearLevelUp.Play();
         });
     }
