@@ -110,6 +110,10 @@ public class GameManager : Singletone<GameManager>
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            var be = ObjPool.Instance.Get<Bacteria>(PoolType.Bacteria, Vector3.zero);
+        }
         if (Input.GetKeyDown(KeyCode.Y))
         {
             var aa = ObjPool.Instance.Get<AttackAddon>(PoolType.AttackAddon, Vector3.zero);

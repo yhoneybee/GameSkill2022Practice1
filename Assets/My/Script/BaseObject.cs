@@ -28,6 +28,7 @@ public abstract class BaseObject : BaseAll
         set
         {
             maxHp = value;
+            ChangeHp();
         }
     }
     public int maxHp;
